@@ -1,0 +1,33 @@
+#!/usr(/local)/bin/gorun
+package main
+
+import …
+
+gorun? rungo? rung? goshebang?
+
+main:
+take hash/checksum/etc. of file
+look up in DB, if not there →compile→
+else check looked-up version of go runtime, if not matches current, →compile→
+else get name of executable (possibly hash itself?)
+exec executable (nothing else to do, so no reason to fork)
+
+compile:
+find architecture symbol for current platform (6, 8, 5)
+run #g on file minus the first line (possibly feed on stdin?) with -o to $tmpdir/$hash.gorun.#
+run #l on that with -o to ~/.gorun/$hash
+store hash, go runtime version in DB
+return filename of executable
+
+
+hash is the right idea, I think. Changed files are recompiled, the same file in a different location isn’t.
+how does garbage collection work? time since last running > something?
+what kind of hash? md5? sha1? sha2? something else? selectable (-h md5 or something)?
+database is difficult. ¿instead, keep around a small extra file for each compiled executable? inefficient, only if I really can’t do better.
+	use gosqlite? brings a dependency, is it necessary? does it keep the DB file in memory?
+	use json? requires parsing the whole file every time, can something else do better?
+	use CSV or TSV or something? how efficient is that?
+if timestamp is used, it’s nanoseconds since epoch as an int64. time.Nanoseconds() gives this.
+maybe check filename and delete previous executables for that filename? Only a relational DB does that efficiently.
+use a per-user directory for stored executables, central directory is asking for malicious replacements, unless belongs to root.
+should I hash with the library routines (ex. import "crypto/md5" ; md5sum := md5.New() ; md5sum.Write() ) or an external program (ex. /usr/bin/md5sum )
