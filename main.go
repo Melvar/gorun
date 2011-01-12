@@ -51,6 +51,6 @@ func main() {
 	if err := table.WriteBack(); err != nil {
 		log.Println(err)
 	}
-//TODO: check for existence of executable
-	os.Exec(hashstr, append(nil, scriptname, os.Args[2:]...), os.Environ())
+
+	os.Exec(hashstr, os.Args[1:], os.Environ())
 }
