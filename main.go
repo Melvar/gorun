@@ -12,12 +12,12 @@ import (
 func main() {
 
 	if len(os.Args) < 2 { //no filename
-		log.Exitln("No filename given")
+		log.Fatalln("No filename given")
 	}
 	scriptname := os.Args[1]
 	scriptfile, err := os.Open(scriptname, os.O_RDONLY, 0)
 	if err != nil {
-		log.Exitln(err)
+		log.Fatalln(err)
 	}
 	defer scriptfile.Close()
 
@@ -27,14 +27,14 @@ func main() {
 
 	table, err := db.UseFile(dbfilename) //get our data ready
 	if err != nil {
-		log.Exitln(err)
+		log.Fatalln(err)
 	}
 
 	metadata, ok := table.Get(hashstr) //look for record of scriptfile
 	compileAdd := func(add func(db.Table, db.Entry)) { //deduplication closure
 		metadata, err = compile(scriptfile)
 		if err != nil {
-			log.Exitln(err)
+			log.Fatalln(err)
 		}
 		add(table, metadata)
 	}
