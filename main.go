@@ -12,11 +12,12 @@ import (
 const (
 	dbfilename = path.Join(os.Getenv("HOME"), ".gorundb.gob")
 	storedir = path.Join(os.Getenv("HOME"), ".gorun")
+	dirperms = 0755
 )
 
 func main() {
 
-	err := os.MkdirAll(storedir)
+	err := os.MkdirAll(storedir, dirperms)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -53,7 +54,11 @@ func main() {
 				log.Fatalln(err)
 			}
 		} else {
-			metadata.lastused = os.Time()
+			metadata.lastused, _, err = os.Time()
+			if err != nil {
+				log.Println(err)
+				metadata.lastused = ^(1 << 63) //set time to latest possible
+			}
 			metadata.filename = scriptname
 		}
 	}
