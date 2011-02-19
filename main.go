@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"log"
 	hasht "crypto/sha256" //hash type, changeable
-	db "./db" //primitive database adapter
 )
 
 func main() {
@@ -25,30 +24,31 @@ func main() {
 	io.Copy(hash, scriptfile) //feed data to hash func
 	hashstr := fmt.Sprintf("%x", hash.Sum()) //get hash as hex string
 
-	table, err := db.UseFile(dbfilename) //get our data ready
+	table, err := readTable(dbfilename) //get our data ready
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	metadata, ok := table.Get(hashstr) //look for record of scriptfile
-	compileAdd := func(add func(db.Table, db.Entry)) { //deduplication closure
+	metadata, ok := table[hashstr] //look for record of scriptfile
+	if !ok {
 		metadata, err = compile(scriptfile)
 		if err != nil {
 			log.Fatalln(err)
 		}
-		add(table, metadata)
-	}
-	if !ok {
-		compileAdd(db.Table.Add)
+		table[hashstr] = metadata
 	} else {
 		if !os.??fileexists(storedir + hashstr) {
-			compileAdd(db.Table.Update)
+			metadata, err = compile(scriptfile)
+			if err != nil {
+				log.Fatalln(err)
+			}
+		} else {
+			metadata.lastused = os.Time()
+			metadata.filename = scriptname
 		}
-		metadata.lastused = os.Time()
-		metadata.filename = scriptname
-		table.Update(metadata)
+		table[hashstr] = metadata
 	}
-	if err := table.WriteBack(); err != nil {
+	if err := writeTable(table, dbfilename); err != nil {
 		log.Println(err)
 	}
 
