@@ -35,7 +35,6 @@ func main() {
 		if err != nil {
 			log.Fatalln(err)
 		}
-		table[hashstr] = metadata
 	} else {
 		if _, err = os.Stat(storedir + hashstr); err != nil {
 			metadata, err = compile(scriptfile)
@@ -46,8 +45,8 @@ func main() {
 			metadata.lastused = os.Time()
 			metadata.filename = scriptname
 		}
-		table[hashstr] = metadata
 	}
+	table[hashstr] = metadata
 	if err := writeTable(table, dbfilename); err != nil {
 		log.Println(err)
 	}
