@@ -9,7 +9,17 @@ import (
 	hasht "crypto/sha256" //hash type, changeable
 )
 
+const (
+	dbfilename = path.Join(os.Getenv("HOME"), ".gorundb.gob")
+	storedir = path.Join(os.Getenv("HOME"), ".gorun")
+)
+
 func main() {
+
+	err := os.MkdirAll(storedir)
+	if err != nil {
+		log.Fatalln(err)
+	}
 
 	if len(os.Args) < 2 { //no filename
 		log.Fatalln("No filename given")
