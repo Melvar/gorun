@@ -37,7 +37,7 @@ func main() {
 		}
 		table[hashstr] = metadata
 	} else {
-		if !os.??fileexists(storedir + hashstr) {
+		if _, err = os.Stat(storedir + hashstr); err != nil {
 			metadata, err = compile(scriptfile)
 			if err != nil {
 				log.Fatalln(err)
