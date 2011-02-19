@@ -5,6 +5,7 @@ import (
 	"io"
 	"fmt"
 	"log"
+	"path"
 	hasht "crypto/sha256" //hash type, changeable
 )
 
@@ -36,7 +37,7 @@ func main() {
 			log.Fatalln(err)
 		}
 	} else {
-		if _, err = os.Stat(storedir + hashstr); err != nil {
+		if _, err = os.Stat(path.Join(storedir, hashstr)); err != nil {
 			metadata, err = compile(scriptfile)
 			if err != nil {
 				log.Fatalln(err)
@@ -51,5 +52,5 @@ func main() {
 		log.Println(err)
 	}
 
-	os.Exec(hashstr, os.Args[1:], os.Environ())
+	os.Exec(path.Join(storedir, hashstr), os.Args[1:], os.Environ())
 }
