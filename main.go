@@ -9,9 +9,12 @@ import (
 	hasht "crypto/sha256" //hash type, changeable
 )
 
-const (
+var (
 	dbfilename = path.Join(os.Getenv("HOME"), ".gorundb.gob")
 	storedir = path.Join(os.Getenv("HOME"), ".gorun")
+)
+
+const (
 	dirperms = 0755
 )
 
