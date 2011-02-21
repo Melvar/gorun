@@ -15,6 +15,7 @@ var (
 )
 
 const (
+	perms = 0644
 	dirperms = 0755
 )
 
