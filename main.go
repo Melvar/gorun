@@ -61,7 +61,7 @@ func main() {
 			metadata.lastused, _, err = os.Time()
 			if err != nil {
 				log.Println(err)
-				metadata.lastused = ^(1 << 63) //set time to latest possible
+				metadata.lastused = 0x7FFFFFFFFFFFFFFF //set time to latest possible
 			}
 			metadata.filename = scriptname
 		}
