@@ -47,25 +47,25 @@ func main() {
 
 	metadata, ok := table[hashstr] //look for record of scriptfile
 	if !ok {
-		metadata, err = compile(scriptfile)
+		err = compile(scriptfile)
 		if err != nil {
 			log.Fatalln(err)
 		}
 	} else {
 		if _, err = os.Stat(path.Join(storedir, hashstr)); err != nil {
-			metadata, err = compile(scriptfile)
+			err = compile(scriptfile)
 			if err != nil {
 				log.Fatalln(err)
 			}
-		} else {
-			metadata.lastused, _, err = os.Time()
-			if err != nil {
-				log.Println(err)
-				metadata.lastused = 0x7FFFFFFFFFFFFFFF //set time to latest possible
-			}
-			metadata.filename = scriptname
 		}
 	}
+	metadata.hash = hashstr
+	metadata.lastused, _, err = os.Time()
+	if err != nil {
+		log.Println(err)
+		metadata.lastused = 0x7FFFFFFFFFFFFFFF //set time to latest possible
+	}
+	metadata.filename = scriptname
 	table[hashstr] = metadata
 	if err := writeTable(table, dbfilename); err != nil {
 		log.Println(err)
