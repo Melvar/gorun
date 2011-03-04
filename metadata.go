@@ -32,7 +32,7 @@ func readTable(filename string) (table map[string] metadata, err os.Error) {
 }
 
 func writeTable(table map[string] metadata, filename string) (err os.Error) {
-	file, err := os.Open(filename, os.O_WRONLY | os.O_CREAT, perms)
+	file, err := os.Open(filename, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, perms)
 	if err != nil {
 		return
 	}
