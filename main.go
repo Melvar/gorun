@@ -47,13 +47,13 @@ func main() {
 
 	metadata, ok := table[hashstr] //look for record of scriptfile
 	if !ok {
-		err = compile(scriptfile)
+		err = compile(scriptfile, hashstr)
 		if err != nil {
 			log.Fatalln(err)
 		}
 	} else {
 		if _, err = os.Stat(path.Join(storedir, hashstr)); err != nil {
-			err = compile(scriptfile)
+			err = compile(scriptfile, hashstr)
 			if err != nil {
 				log.Fatalln(err)
 			}
