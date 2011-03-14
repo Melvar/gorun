@@ -65,6 +65,9 @@ func run(name string, argv []string, stdin io.Reader) os.Error {
 		if _, err := io.Copy(proc.Stdin, stdin); err != nil {
 			return err
 		}
+		if err := proc.Stdin.Close(); err != nil {
+			return err
+		}
 	}
 	wm, err := proc.Wait(0)
 	for err == os.EINTR {
