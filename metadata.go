@@ -6,17 +6,17 @@ import (
 )
 
 type metadata struct {
-	Hash string
+	Hash     string
 	Lastused int64
 	Filename string
 }
 
-func readTable(filename string) (table map[string] metadata, err os.Error) {
-	file, err := os.Open(filename, os.O_RDONLY | os.O_CREAT, perms)
+func readTable(filename string) (table map[string]metadata, err os.Error) {
+	file, err := os.Open(filename, os.O_RDONLY|os.O_CREAT, perms)
 	if err != nil {
 		return
 	}
-	table = make(map[string] metadata)
+	table = make(map[string]metadata)
 	dec := gob.NewDecoder(file)
 	for err == nil { //err is nil the first time, see above
 		var entry metadata
@@ -31,8 +31,8 @@ func readTable(filename string) (table map[string] metadata, err os.Error) {
 	return
 }
 
-func writeTable(table map[string] metadata, filename string) (err os.Error) {
-	file, err := os.Open(filename, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, perms)
+func writeTable(table map[string]metadata, filename string) (err os.Error) {
+	file, err := os.Open(filename, os.O_WRONLY|os.O_CREAT|os.O_TRUNC, perms)
 	if err != nil {
 		return
 	}

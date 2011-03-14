@@ -11,11 +11,11 @@ import (
 
 var (
 	dbfilename = path.Join(os.Getenv("HOME"), ".gorundb.gob")
-	storedir = path.Join(os.Getenv("HOME"), ".gorun")
+	storedir   = path.Join(os.Getenv("HOME"), ".gorun")
 )
 
 const (
-	perms = 0644
+	perms    = 0644
 	dirperms = 0755
 )
 
@@ -39,7 +39,7 @@ func main() {
 	defer scriptfile.Close()
 
 	hash := hasht.New()
-	io.Copy(hash, scriptfile) //feed data to hash func
+	io.Copy(hash, scriptfile)                //feed data to hash func
 	hashstr := fmt.Sprintf("%x", hash.Sum()) //get hash as hex string
 
 	table, err := readTable(dbfilename) //get our data ready
