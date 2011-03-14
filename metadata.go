@@ -6,9 +6,9 @@ import (
 )
 
 type metadata struct {
-	hash string
-	lastused int64
-	filename string
+	Hash string
+	Lastused int64
+	Filename string
 }
 
 func readTable(filename string) (table map[string] metadata, err os.Error) {
@@ -22,7 +22,7 @@ func readTable(filename string) (table map[string] metadata, err os.Error) {
 		var entry metadata
 		err = dec.Decode(&entry)
 		if err == nil {
-			table[entry.hash] = entry
+			table[entry.Hash] = entry
 		}
 	}
 	if err == os.EOF {

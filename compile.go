@@ -8,7 +8,6 @@ import (
 	"path"
 	"exec"
 	"runtime"
-	"log"
 )
 
 func compile(source io.ReadSeeker, targetname string) os.Error {

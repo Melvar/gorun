@@ -59,13 +59,13 @@ func main() {
 			}
 		}
 	}
-	metadata.hash = hashstr
-	metadata.lastused, _, err = os.Time()
+	metadata.Hash = hashstr
+	metadata.Lastused, _, err = os.Time()
 	if err != nil {
 		log.Println(err)
-		metadata.lastused = 0x7FFFFFFFFFFFFFFF //set time to latest possible
+		metadata.Lastused = 0x7FFFFFFFFFFFFFFF //set time to latest possible
 	}
-	metadata.filename = scriptname
+	metadata.Filename = scriptname
 	table[hashstr] = metadata
 	if err := writeTable(table, dbfilename); err != nil {
 		log.Println(err)
