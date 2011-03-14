@@ -3,10 +3,12 @@ package main
 import (
 	"os"
 	"io"
+	"bufio"
 	"fmt"
 	"path"
 	"exec"
 	"runtime"
+	"log"
 )
 
 func compile(source io.ReadSeeker, targetname string) os.Error {
@@ -17,12 +19,23 @@ func compile(source io.ReadSeeker, targetname string) os.Error {
 	gc := O + "g"
 	gl := O + "l"
 	tempobj := path.Join(os.TempDir(), targetname+"."+O)
-	var shebang string
-	if fmt.Fscanln(source, &shebang); shebang[:2] != "#!" {
-		source.Seek(0, 0)
+
+	_, err = source.Seek(0, 0)
+	if err != nil {
+		return err
+	}
+	bufsource := bufio.NewReader(source)
+	var insource io.Reader = bufsource
+	if line, err := bufsource.ReadString('\n'); err != nil && err != os.EOF ||
+		len(line) < 2 || line[:2] != "#!" {
+		_, err := source.Seek(0, 0)
+		if err != nil {
+			return err
+		}
+		insource = source
 	}
 
-	err = run(gc, []string{gc, "-o", tempobj, "/dev/stdin"}, source)
+	err = run(gc, []string{gc, "-o", tempobj, "/dev/stdin"}, insource)
 	if err != nil {
 		return err
 	}
