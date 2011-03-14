@@ -19,6 +19,8 @@ const (
 	dirperms = 0755
 )
 
+const latestTime = 0x7FFFFFFFFFFFFFFF //Latest possible time with an int64
+
 func main() {
 
 	err := os.MkdirAll(storedir, dirperms)
@@ -63,7 +65,7 @@ func main() {
 	metadata.Lastused, _, err = os.Time()
 	if err != nil {
 		log.Println(err)
-		metadata.Lastused = 0x7FFFFFFFFFFFFFFF //set time to latest possible
+		metadata.Lastused = latestTime
 	}
 	metadata.Filename = scriptname
 	table[hashstr] = metadata
