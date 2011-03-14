@@ -45,13 +45,17 @@ func getArchSym() (sym string, err os.Error) {
 }
 
 func run(name string, argv []string, stdin io.Reader) os.Error {
+	executable, err := exec.LookPath(name)
+	if err != nil {
+		return err
+	}
 	var sin int
 	if stdin == nil {
 		sin = exec.PassThrough
 	} else {
 		sin = exec.Pipe
 	}
-	proc, err := exec.Run(name, argv, os.Environ(), "", sin,
+	proc, err := exec.Run(executable, argv, os.Environ(), "", sin,
 		exec.PassThrough, exec.PassThrough)
 	if err != nil {
 		return err
